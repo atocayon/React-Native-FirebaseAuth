@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Label, Button} from 'native-base';
+import {Container, Header, Content, Form, Item, Input, Label, Button, CardItem, Card} from 'native-base';
 import firebase from 'react-native-firebase';
 import {Spinner} from '../components/common';
-import Reactotron from 'reactotron-react-native'
+import Reactotron from 'reactotron-react-native';
 
 export default class Login extends Component {
 
@@ -22,20 +22,27 @@ export default class Login extends Component {
         const {email, password} = this.state;
         this.setState({error: '', isLoading: true});
 
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
-            .catch(() => {
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .catch(this.onLoginFailed.bind(this));
-            });
+        if (email.trim() === '' && password.trim() === '') {
+            alert('All field is required!!!');
+            this.onLoginFailed();
+        } else {
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(this.onLoginSuccess.bind(this))
+                .catch(() => {
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .catch(this.onLoginFailed.bind(this));
+                });
+        }
+
+
     };
 
-    onLoginFailed(){
+    onLoginFailed() {
         this.setState({
-           email: '',
-           password: '',
-           error: 'Authentication Error',
-           isLoading: false
+            email: '',
+            password: '',
+            error: 'Authentication Error',
+            isLoading: false,
         });
     }
 
@@ -45,7 +52,7 @@ export default class Login extends Component {
             email: '',
             password: '',
             error: '',
-            isLoading: false
+            isLoading: false,
         });
 
     }
@@ -69,24 +76,40 @@ export default class Login extends Component {
                 <Header/>
                 <Content style={{padding: 10}}>
                     <Form>
-                        <Item>
-                            <Label>Email : </Label>
-                            <Input
-                                value={this.state.email}
-                                onChangeText={(text) => this.setState({email: text})}
-                            />
-                        </Item>
-                        <Item>
-                            <Label>Password : </Label>
-                            <Input
-                                secureTextEntry={true}
-                                value={this.state.password}
-                                onChangeText={(text) => this.setState({password: text})}
-                            />
-                        </Item>
-                        <Item>
-                            <Text>{this.state.error}</Text>
-                        </Item>
+                        <CardItem>
+                            <Item stackedLabel>
+                                <Label>Email</Label>
+
+                                <Input
+                                    value={this.state.email}
+                                    onChangeText={(text) => this.setState({email: text})}
+                                />
+
+
+                            </Item>
+                            <View
+                                style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{color: '#ff0000'}}>{this.state.error}</Text>
+                            </View>
+                        </CardItem>
+
+                        <CardItem>
+                            <Item stackedLabel>
+                                <Label>Password</Label>
+
+                                <Input
+                                    secureTextEntry={true}
+                                    value={this.state.password}
+                                    onChangeText={(text) => this.setState({password: text})}
+                                />
+
+                            </Item>
+                            <View
+                                style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{color: '#ff0000'}}>{this.state.error}</Text>
+                            </View>
+                        </CardItem>
+
 
                         {this.renderButton()}
 

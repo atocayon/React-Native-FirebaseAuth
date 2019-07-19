@@ -9,10 +9,12 @@
     "clean": "cd android && gradlew clean && cd.."
   },
   "dependencies": {
+    "formik": "^1.5.8",
     "native-base": "^2.12.2",
     "react": "16.8.6",
     "react-native": "0.60.4",
-    "react-native-firebase": "^5.5.5"
+    "react-native-firebase": "^5.5.5",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
